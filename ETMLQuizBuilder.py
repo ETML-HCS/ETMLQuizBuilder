@@ -136,8 +136,16 @@ def generate_questionnaire_html(title, quiz):
     form_html += '''
     <input  id="submitButton" type="submit" value="Submit" style="display:none;" />
     </form>
-    <div onClick="goToPreviousQuestion();" id="previousButton" style="display: inline;height: 20px;width:50px;text-align:center;margin-right: 10px;" > << </div>
-    <div onClick="goToNextQuestion();" id="nextButton" style="display: inline;height: 20px;width:50px;text-align:center;margin-right: 10px;" > >> </div>
+
+     <div class="nav" style="display: flex; flex-direction: row; float: right;">
+
+        <div  onClick="goToPreviousQuestion();" id="previousButton"
+            style="height: 20px;width:50px;text-align:center;margin: 10px; "> << </div>
+
+        <div onClick="goToNextQuestion();" id="nextButton"
+            style="height: 20px;width:50px;text-align:center;margin: 10px;"> >> </div>
+    </div>
+
     <footer>ETML / CFPV | Quiz serveur | Section informatique</footer>
 </body>
 
@@ -261,165 +269,199 @@ def create_quiz_module(file_name):
     results_html = generate_results_html(len(quiz))
     student_response_script = generate_student_response_script(quiz)
     
-    css_content = """
-#region Styles pour le corps de la page
+    css_content = """/* Styles Généraux */
 body {
     position: static;
-    width: 85%;
+    width: 90%;
     margin: 0 auto;
-    padding: 10px;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-    font-size: larger;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    font-size: 1.1em;
+    line-height: 1.6;
+    background-color: #f4f4f4;
+    color: #333;
 }
-#endregion
 
-#region Styles pour le pied de page
 footer {
     position: fixed;
-    bottom: 0;
-    height: 25px;
+    left: 0;
+    bottom:0;
+    height: 18px;
     width: 100%;
     text-align: center;
+    font-size: small;
     color: #ffffff;
-    background-color: #007bff;
-    margin-left: auto;
-    margin-right: auto;
-    left: 0;
-    right: 0;
+    background-color: #004475;
+    padding: 3px 0;
 }
-#endregion
 
-#region Styles pour le logo
 #logo {
     background-image: url("/static/images/ETML.png");
     background-size: contain;
+    height: 1.5em;
     background-repeat: no-repeat;
-    min-height: 30px;
-    padding-bottom: 4px;
-    border-bottom: 2px solid rgb(116, 116, 4);
+    border-bottom: 3px solid #444;
 }
-#endregion
 
-#region Styles pour les titres de niveau 2
 h2 {
-    font-size: 18px;
-    font-weight: bold;
-    margin-bottom: 10px;
+    font-size: 1.6em;
+    font-weight: 600;
+    color: #444;
+    margin: 1.2em 0;
 }
-#endregion
 
-#region Styles pour les paragraphes de question
 p.question {
-    margin-bottom: 10px;
+    margin: 1em 0;
+    font-size: 1.2em;
 }
-#endregion
 
-#region Styles pour les étiquettes de question
 p.question-label {
     font-weight: bold;
+    color: #444;
 }
-#endregion
 
-#region Styles pour les champs de texte
 input[type="text"],
 textarea {
-    width: 100%;
-    padding: 5px;
-    margin-bottom: 10px;
+    width: 70%;
+    background-color: #e0dddd5d;
+    padding: 10px;
+    margin: 0 auto;
+    font-size: 1em;
+    border-radius: 5px;
+    border: 1px solid #656363;
 }
-#endregion
 
-#region Styles pour les boutons radio et les cases à cocher
 input[type="radio"],
 input[type="checkbox"] {
-    margin-block: 20px;
-    margin-inline: 12px;
+    margin: 0.5em;
 }
-#endregion
 
-#region Styles pour les boutons
 #bt_login,
 #previousButton,
 #nextButton,
 input[type="submit"] {
-    background-color: darkblue;
-    color: white;
-    font-weight: bold;
-    padding: 10px 20px;
+    background-color: #004475;
+    color: #fff;
+    font-weight: 600;
+    padding: 10px 30px;
+    border-radius: 5px;
     border: none;
     cursor: pointer;
+    transition: background .3s ease-in-out;
 }
-#endregion
 
-#region Styles pour les boutons au survol
 #bt_login:hover,
 #previousButton:hover,
 #nextButton:hover,
 input[type="submit"]:hover {
-    background-color: darkcyan;
+    background-color: #0078d4;
 }
-#endregion
 
-#region Styles pour les messages d'erreur
 #error {
-    color: red;
-    margin-top: 5px;
+    color: #ff0000;
+    font-weight: bold;
+    margin-top: 10px;
 }
-#endregion
 
-#region Styles pour les sections de question
 .oneQuest {
-    height: 60vh;
+    height: 45vh;
     display: none;
     flex-direction: column;
+    padding: 10px;
+    border-radius: 5px;
+    background: #fff;
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
 }
+
 .show {
     display: flex;
 }
-#endregion
 
-#region Styles pour le nombre d'étudiants ayant répondu
 #student-count {
     font-weight: bold;
-    margin-bottom: 10px;
+    color: #444;
 }
-#endregion
 
-#region Styles pour les réponses des étudiants
 #student-responses {
     margin-top: 20px;
 }
-#endregion
 
-#region Styles pour le tableau des réponses des étudiants
 #student-responses table {
     width: 100%;
     border-collapse: collapse;
+    margin-top: 20px;
 }
+
 #student-responses th,
 #student-responses td {
-    padding: 8px;
+    padding: 10px;
     text-align: left;
     border-bottom: 1px solid #ddd;
 }
-#endregion
 
-#region Styles pour les réponses incorrectes
 .incorrect {
-    background-color: #ff9999; /* Couleur de fond pour les réponses incorrectes */
-    color: #ff0000; /* Couleur du texte pour les réponses incorrectes */
+    background-color: #ff9999;
+    color: #ff0000;
 }
-#endregion
 
-#region Styles pour les réponses correctes
 .correct {
-    background-color: #99ff99; /* Couleur de fond pour les réponses correctes */
-    color: #009900; /* Couleur du texte pour les réponses correctes */
+    background-color: #99ff99;
+    color: #009900;
 }
-#endregion
 
-
+/* Styles pour smartphones */
+@media screen and (max-width: 768px) {
+    body {
+      padding: 10px;
+      font-size: 1em;
+    }
+  
+    footer {
+      height: 30px;
+      font-size: x-small;
+    }
+  
+    #logo {
+      height: 1.2em;
+    }
+  
+    h2 {
+      font-size: 1.4em;
+    }
+  
+    p.question {
+      font-size: 1em;
+    }
+  
+    input[type="text"],
+    textarea {
+      width: 95%;
+      padding: 8px;
+    }
+  
+    #bt_login,
+    #previousButton,
+    #nextButton,
+    input[type="submit"] {
+      padding: 8px 16px;
+    }
+  
+    .oneQuest {
+      height: auto;
+      padding: 5px;
+    }
+  
+    #student-responses table {
+      font-size: 0.8em;
+    }
+  
+    #student-responses th,
+    #student-responses td {
+      padding: 5px;
+    }
+  }
 """
+    
     js_content = """const submitButton = document.getElementById('submitButton');
 const previousButton = document.getElementById('previousButton');
 const nextButton = document.getElementById('nextButton');
@@ -544,6 +586,8 @@ function goToPreviousQuestion() {
     css_file_path = create_css_file(module_dir, "styles.css", css_content)
     js_questions_path = create_js_file(module_dir, "student_form_script.js", js_content)    
     js_responses_path = create_js_file(module_dir, "student_response_script.js", student_response_script)
+
+    os.rename("ETML.png",images_dir+"\\ETML.png")
 
     save_html(question_html, os.path.join(template_dir, "Quest.html"))
     save_html(results_html, os.path.join(template_dir, "Results.html"))
